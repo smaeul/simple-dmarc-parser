@@ -1,8 +1,13 @@
 [tool.poetry]
 name = "simple-dmarc-parser"
-version = "1.0.0"
+version = "1.0.1"
 description = "A Python script that processes DMARC reports from a mailbox and gives a basic summary."
 authors = ["FrostTheFox <python@frostthefox.pw>"]
+keywords = ["dmarc", "rua"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/FrostTheFox/simple-dmarc-parser"
+repository = "https://github.com/FrostTheFox/simple-dmarc-parser"
 
 [tool.poetry.dependencies]
 python = "^3.6"
