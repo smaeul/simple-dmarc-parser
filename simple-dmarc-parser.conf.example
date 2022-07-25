@@ -1,0 +1,7 @@
+{
+    "server": "mail.example.com",
+    "username": "dmarc-rua@example.com",
+    "password": "dmarc-rua-password",
+    "delete_messages": false,
+    "silent": false
+}

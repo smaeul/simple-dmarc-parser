@@ -1,0 +1,30 @@
+[[package]]
+name = "imap-tools"
+version = "0.56.0"
+description = "Work with email by IMAP"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "xmltodict"
+version = "0.13.0"
+description = "Makes working with XML feel like you are working with JSON"
+category = "main"
+optional = false
+python-versions = ">=3.4"
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.6"
+content-hash = "dd25599a1dd23f498d81cf84c4ad3350c2d7ac4e32ad8080b67c63f7b7cf7195"
+
+[metadata.files]
+imap-tools = [
+    {file = "imap-tools-0.56.0.tar.gz", hash = "sha256:56942853be2125d509365b84eacf0f3a87ae58ea8f82bca7a6943634a60cfb60"},
+    {file = "imap_tools-0.56.0-py3-none-any.whl", hash = "sha256:4fe4c07c4cc4aab83492d126e221c39118ff530268149b721296fc0fb87de3c2"},
+]
+xmltodict = [
+    {file = "xmltodict-0.13.0-py2.py3-none-any.whl", hash = "sha256:aa89e8fd76320154a40d19a0df04a4695fb9dc5ba977cbb68ab3e4eb225e7852"},
+    {file = "xmltodict-0.13.0.tar.gz", hash = "sha256:341595a488e3e01a85a9d8911d8912fd922ede5fecc4dce437eb4b6c8d037e56"},
+]
