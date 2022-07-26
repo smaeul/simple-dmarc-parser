@@ -124,7 +124,8 @@ def main():
 
     # If we didn't get anything from the IMAP server, exit.
     if not os.path.isdir(directory):
-        print('No reports found, exiting.')
+        if not silent:
+            print('No reports found, exiting.')
         sys.exit()
 
     for file in os.listdir(directory):
