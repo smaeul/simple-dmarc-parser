@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "simple-dmarc-parser"
-version = "1.0.2"
+version = "1.0.3"
 description = "A Python script that processes DMARC reports from a mailbox and gives a basic summary."
 authors = ["FrostTheFox <python@frostthefox.pw>"]
 keywords = ["dmarc", "rua"]

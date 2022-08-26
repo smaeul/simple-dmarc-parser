@@ -78,6 +78,7 @@ def main():
             delete_messages = True
         else:
             delete_messages = False
+        silent = False
     # If config is provided, use that.
     elif args.config:
         with open(args.config, 'r') as f:
