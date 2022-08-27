@@ -203,3 +203,5 @@ def main():
     if delete_messages:
         mailbox.delete(uids)
 
+if __name__ == "__main__":
+    main()
