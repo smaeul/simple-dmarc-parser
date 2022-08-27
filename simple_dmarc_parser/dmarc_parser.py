@@ -148,7 +148,7 @@ def main():
     # Refresh our file list.
     for file in os.listdir(directory):
         # Grab the actual XML files, not the compressed files.
-        if '.xml' in file and '.gz' not in file:
+        if '.xml' in file and '.gz' not in file and '.zip' not in file:
             with open(f'{directory}{file}', 'r', encoding='utf8') as f:
                 content = f.read()
 
