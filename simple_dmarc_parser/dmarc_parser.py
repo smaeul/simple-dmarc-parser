@@ -43,7 +43,7 @@ def process_record(record, sources, domains):
 
     # Set up the count dictionary if not existing for this IP
     if source_ip not in sources:
-        sources[source_ip] = {'count': {'passed': 0, 'failed': 0}}
+        sources[source_ip] = {'count': {'passed': 0, 'failed': 0}, 'spf': set()}
 
     # Set up the count dictionary if not existing for this domain
     if source_domain not in domains:
@@ -57,6 +57,8 @@ def process_record(record, sources, domains):
     if not ok:
         domains[source_domain]['count']['failed'] += count
         sources[source_ip]['count']['failed'] += count
+
+    sources[source_ip]['spf'].add(record['auth_results']['spf']['domain'])
 
     # Return our results.
     return ok, sources, domains
@@ -189,6 +191,7 @@ def main():
             print(f"  {source}")
             print(f"    Passed: {count['passed']}")
             print(f"    Failed: {count['failed']}")
+            print(f"    Domain: {' '.join(sorted(sources[source]['spf']))}")
 
         print('\nMessages per Source Domain:')
         for domain in sorted(domains.keys()):
