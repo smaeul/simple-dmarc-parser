@@ -175,7 +175,7 @@ def main():
             # If the record processing reported a failure, let the user see it.
             if not ok:
                 print('\nFailed DMARC report, printing:')
-                print(data)
+                print(json.dumps(data))
 
     if not silent:
         # Output our summary.
