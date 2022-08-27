@@ -188,6 +188,8 @@ def main():
         print('\nMessages per Source IP:')
         for source in sorted(sources.keys()):
             count = sources[source]['count']
+            if count['failed'] == 0:
+                continue
             print(f"  {source}")
             print(f"    Passed: {count['passed']}")
             print(f"    Failed: {count['failed']}")
