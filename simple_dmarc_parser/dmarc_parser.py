@@ -5,12 +5,10 @@ import gzip
 import sys
 import json
 import argparse
-from imap_tools import MailBox, AND
+import mailbox
 
 parser = argparse.ArgumentParser(description='A tool that processes DMARC reports from a mailbox and gives a basic summary.')
-parser.add_argument('--server', help='IMAP Server IP/FQDN', required=False)
-parser.add_argument('--username', help='IMAP Username', required=False)
-parser.add_argument('--password', help='IMAP Password', required=False)
+parser.add_argument('--path', help='Mailbox path', required=False)
 parser.add_argument('--config', help='Config file to use', required=False)
 parser.add_argument('--delete', help='Delete report messages after processing. THIS CANNOT BE UNDONE.', action='store_true')
 parser.add_argument('--silent', help='Silences non-error output.', action='store_true')
@@ -70,10 +68,7 @@ def main():
 
     # Prompt for credentials if nothing provided.
     if not len(sys.argv) > 1:
-        from getpass import getpass
-        server = input('IMAP Server IP/FQDN: ')
-        username = input('IMAP Username: ')
-        password = getpass(prompt='IMAP Password: ')
+        path = input('Mailbox path: ')
         if input('Delete messages? Press enter for default (n): ') == 'y':
             delete_messages = True
         else:
@@ -84,16 +79,12 @@ def main():
         with open(args.config, 'r') as f:
             config = json.loads(f.read())
             f.close()
-        server = config['server']
-        username = config['username']
-        password = config['password']
+        path = config['path']
         delete_messages = config['delete_messages']
         silent = config['silent']
     # Otherwise, use what is provided.
     else:
-        server = args.server
-        username = args.username
-        password = args.password
+        path = args.path
         delete_messages = args.delete
         silent = args.silent
 
@@ -108,20 +99,28 @@ def main():
     if os.path.isdir(directory):
         shutil.rmtree(directory)
 
-    mailbox = MailBox(server).login(username, password)
-    # Loop over unread messages.
-    for msg in mailbox.fetch(AND(seen=False)):
+    def handle_multipart(msg):
         # Grab the message attachment.
-        for att in msg.attachments:
+        for att in msg.get_payload():
+            if att.is_multipart():
+                handle_multipart(att)
+                continue
             # Retain the original filename.
-            filename = att.filename
+            filename = att.get_filename()
+            if filename is None:
+                continue
             os.makedirs(directory, exist_ok=True)
             # Download the attachment.
             with open(f'{directory}{filename}', 'wb') as f:
-                f.write(att.payload)
-                f.close()
+                f.write(att.get_payload(decode=True))
             # Store UIDs for later deletion.
-            uids.append(msg.uid)
+            uids.append(uid)
+
+    maildir = mailbox.Maildir(path, create=False)
+    # Loop over all messages.
+    for uid, msg in maildir.items():
+        if msg.is_multipart():
+            handle_multipart(msg)
 
     # If we didn't get anything from the IMAP server, exit.
     if not os.path.isdir(directory):
@@ -201,7 +200,8 @@ def main():
     # Clean up.
     shutil.rmtree(directory)
     if delete_messages:
-        mailbox.delete(uids)
+        for uid in uids:
+            maildir.remove(uid)
 
 if __name__ == "__main__":
     main()
